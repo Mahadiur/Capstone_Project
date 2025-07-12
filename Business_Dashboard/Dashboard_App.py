@@ -36,4 +36,35 @@ def upload_file():
 product_data, purchases_data, sales_data = upload_file()
 
 
+''' Sidebar '''
+st.sidebar.header('Filters')
+
+date1 = datetime.strptime('2024-01-01','%Y-%m-%d').date()
+date2 = datetime.strptime('2024-12-31','%Y-%m-%d').date()
+
+date_range = st.sidebar.date_input(
+    label='Select Date Range:',
+    value=[date1,date2]
+)
+
+
+locaton_select = st.sidebar.multiselect(
+    label='Select Store Location:',
+    options=['Dhaka','Chattogram','Rajshahi','Sylhet'],
+    default=['Chattogram']
+)
+
+
+category_select = st.sidebar.multiselect(
+    label='Select Product Category:',
+    options=['Groceries', 'Electronics','Clothing','Perishables'],
+    default=['Electronics']
+)
+
+
+
+''' Dashboard '''
+
+
+
 
