@@ -64,6 +64,39 @@ category_select = st.sidebar.multiselect(
 
 
 ''' Dashboard '''
+st.header('Business Analytics Dashboard')
+if product_data is not None:
+    product_data, purchases_data, sales_data = add_business_analytics(
+        sales_data=sales_data,
+        product_data=product_data,
+        purchases_data=purchases_data
+    )
+
+    start_date = str(date_range[0])
+    last_date = str(date_range[1])
+
+    filtered_sale = sales_between_dates(
+        sales_data=sales_data,
+        startDate=start_date,
+        lastDate=last_date,
+        location=locaton_select
+    )
+
+    Filterd_products = Selected_category(
+        product_data=product_data,
+        category=category_select
+    )
+
+    understock_product = Product_UnderStock(
+        product_data=Filterd_products
+    )
+
+    summary_keys = summay_of_data(
+        product_data=Filterd_products,
+        sales_data=filtered_sale   
+    )
+
+
 
 
 
