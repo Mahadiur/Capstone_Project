@@ -23,13 +23,13 @@ def upload_file():
     product_data, purchases_data, sales_data = None, None, None
     for file in uploaded_file:
         if file.name == 'products.csv':
-            product_data = pd.read_csv('file')
+            product_data = pd.read_csv(file)
 
         elif file.name == 'purchases.csv':
-            purchases_data = pd.read_csv('file')
+            purchases_data = pd.read_csv(file)
             purchases_data =pd.to_datetime(purchases_data['purchase_date']).dt.date
         elif file.name == 'sales.csv':
-            sales_data = pd.read_csv('file')
+            sales_data = pd.read_csv(file)
             sales_data = pd.to_datetime(sales_data['sale_date']).dt.date
     return product_data, purchases_data, sales_data
 
@@ -66,7 +66,7 @@ category_select = st.sidebar.multiselect(
 ''' Dashboard '''
 st.header('Business Analytics Dashboard')
 if product_data is not None:
-    product_data, purchases_data, sales_data = add_business_analytics(
+    sales_data,product_data,purchases_data= add_business_analytics(
         sales_data=sales_data,
         product_data=product_data,
         purchases_data=purchases_data
@@ -98,6 +98,30 @@ if product_data is not None:
 
 
 
+    revenue_column, profit_column, quantity_sold, low_stock = st.columns(4)
+    with revenue_column:
+        st.metric(
+            label='Total Revenue (K):',
+            value=f'{summary_keys['Total Revenue (K)']}'
+        )
+
+    with profit_column:
+        st.metric(
+            label='Total Profit (K)',
+            value=f'{summary_keys['Total Profit (K)']}'
+        )
+
+    with quantity_sold:
+        st.metric(
+            label='Sold Quantity (K)',
+            value=f'{summary_keys['Total Sold Quantity (K)']}'
+        )
+
+    with low_stock:
+        st.metric(
+            label='Total UnderStock',
+            value=f'{summary_keys['Total Understock Product']}'
+        )
 
 
 

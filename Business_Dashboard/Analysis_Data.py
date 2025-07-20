@@ -58,13 +58,11 @@ print(date3 <= Date <= date4)
 def Current_Stock(product_id,purchases_data,sales_data):
     # per product purchase quantity
     per_product_purchase = purchases_data[
-        purchases_data['product_id'] == product_id]['quantity_purchased'
-    ].sum()
+        purchases_data['product_id'] == product_id]['quantity_purchased'].sum()
 
     # per product sales quantity
     per_product_sale = sales_data[
-        sales_data['product_id'] == product_id]['quantity_sold'
-    ].sum()
+        sales_data['product_id'] == product_id]['quantity_sold'].sum()
 
 
     # Current Stock
@@ -224,37 +222,37 @@ def summay_of_data(product_data, sales_data):
         'Total Revenue (K)':int(total_revenue/1e3),
         'Total Profit (K)':int(total_profit/1e3),
         'Total Sold Quantity (K)' : int(total_sold_quantity/1e3),
-        'Total Understock Product ':total_understock
+        'Total Understock Product':total_understock
     }
 
 
 def add_business_analytics(sales_data, product_data,purchases_data):
-    product_data['Current_Stock'] = product_data['product_id'].apply(
-    lambda product_id : Current_Stock(
-        product_id=product_id,
-        sales_data=sales_data,
-        purchases_data=purchases_data
+    product_data['Current_Stock'] = product_data['Product_id'].apply(
+        lambda Product_id : Current_Stock(
+            Product_id=Product_id,
+            sales_data=sales_data,
+            purchases_data=purchases_data
         )
     )
 
-    product_data['Per_Product_Profit'] = product_data['product_id'].apply(
-    lambda product_id : per_product_profit(
-        product_id=product_id,
-        sales_data=sales_data,
-        product_data=product_data
+    product_data['Per_Product_Profit'] = product_data['Product_id'].apply(
+        lambda Product_id : per_product_profit(
+            Product_id=Product_id,
+            sales_data=sales_data,
+            product_data=product_data
         )
     )
-    product_data['Slow_Moving_Products'] = product_data['product_id'].apply(
-    lambda product_id: Slow_Moving_Product(
-        product_id=product_id,
-        sales_data=sales_data
+    product_data['Slow_Moving_Products'] = product_data['Product_id'].apply(
+        lambda Product_id: Slow_Moving_Product(
+            Product_id=Product_id,
+            sales_data=sales_data
         )
     )
 
-    product_data['Stock_Status'] = product_data['product_id'].apply(
-    lambda product_id: Stock_status(
-        product_id=product_id,
-        product_data=product_data
+    product_data['Stock_Status'] = product_data['Product_id'].apply(
+        lambda Product_id: Stock_status(
+            Product_id=Product_id,
+            product_data=product_data
     )
     )
 
