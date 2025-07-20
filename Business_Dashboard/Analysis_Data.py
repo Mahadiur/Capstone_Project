@@ -70,15 +70,15 @@ def Current_Stock(product_id,purchases_data,sales_data):
 
     return per_product_stock
 
-print(Current_Stock(1095,purchases_data,sales_data))
+# print(Current_Stock(1095,purchases_data,sales_data))
 
-product_data['Current_Stock'] = product_data['product_id'].apply(
-    lambda product_id : Current_Stock(
-        product_id=product_id,
-        purchases_data=purchases_data,
-        sales_data=sales_data        
-        )
-    )
+# product_data['Current_Stock'] = product_data['product_id'].apply(
+#     lambda product_id : Current_Stock(
+#         product_id=product_id,
+#         purchases_data=purchases_data,
+#         sales_data=sales_data        
+#         )
+#     )
 
 print(product_data.head())
 
@@ -98,15 +98,15 @@ def per_product_profit(product_id,sales_data,product_data):
 
     return per_product_total_profit
 
-print(per_product_profit(1095,sales_data,product_data))
+# print(per_product_profit(1095,sales_data,product_data))
 
-product_data['Per_Product_Profit'] = product_data['product_id'].apply(
-    lambda product_id : per_product_profit(
-        product_id=product_id,
-        sales_data=sales_data,
-        product_data=product_data
-        )
-)
+# product_data['Per_Product_Profit'] = product_data['product_id'].apply(
+#     lambda product_id : per_product_profit(
+#         product_id=product_id,
+#         sales_data=sales_data,
+#         product_data=product_data
+#         )
+# )
 
 print(product_data.head())
 
@@ -128,12 +128,12 @@ def Slow_Moving_Product(product_id,sales_data):
 
     return per_product_info < 40
 
-product_data['Slow_Moving_Products'] = product_data['product_id'].apply(
-    lambda product_id: Slow_Moving_Product(
-        product_id=product_id,
-        sales_data=sales_data
-        )
-)
+# product_data['Slow_Moving_Products'] = product_data['product_id'].apply(
+#     lambda product_id: Slow_Moving_Product(
+#         product_id=product_id,
+#         sales_data=sales_data
+#         )
+# )
 
 print(product_data.head())
 
@@ -152,14 +152,14 @@ def Stock_status(product_id,product_data):
     return 'Perfect Stock'
 
 
-print(Stock_status(1095,product_data))
+# print(Stock_status(1095,product_data))
 
-product_data['Stock_Status'] = product_data['product_id'].apply(
-    lambda product_id: Stock_status(
-        product_id=product_id,
-        product_data=product_data
-    )
-)
+# product_data['Stock_Status'] = product_data['product_id'].apply(
+#     lambda product_id: Stock_status(
+#         product_id=product_id,
+#         product_data=product_data
+#     )
+# )
 
 print(product_data.head())
 
@@ -227,33 +227,32 @@ def summay_of_data(product_data, sales_data):
 
 
 def add_business_analytics(sales_data, product_data,purchases_data):
-    product_data['Current_Stock'] = product_data['Product_id'].apply(
-        lambda Product_id : Current_Stock(
-            Product_id=Product_id,
-            sales_data=sales_data,
-            purchases_data=purchases_data
+    product_data['Current_Stock'] = product_data['product_id'].apply(
+        lambda product_id : Current_Stock(
+            product_id,
+            purchases_data,
+            sales_data
         )
     )
 
-    product_data['Per_Product_Profit'] = product_data['Product_id'].apply(
-        lambda Product_id : per_product_profit(
-            Product_id=Product_id,
-            sales_data=sales_data,
-            product_data=product_data
+    product_data['Per_Product_Profit'] = product_data['product_id'].apply(
+        lambda product_id : per_product_profit(
+            product_id,
+            sales_data,
+            product_data
         )
     )
-    product_data['Slow_Moving_Products'] = product_data['Product_id'].apply(
-        lambda Product_id: Slow_Moving_Product(
-            Product_id=Product_id,
-            sales_data=sales_data
+    product_data['Slow_Moving_Products'] = product_data['product_id'].apply(
+        lambda product_id: Slow_Moving_Product(
+            product_id,
+            sales_data
         )
     )
 
-    product_data['Stock_Status'] = product_data['Product_id'].apply(
-        lambda Product_id: Stock_status(
-            Product_id=Product_id,
-            product_data=product_data
-    )
+    product_data['Stock_Status'] = product_data['product_id'].apply(
+        lambda product_id: Stock_status(
+            product_id,product_data
+        )
     )
 
     return sales_data, product_data, purchases_data
