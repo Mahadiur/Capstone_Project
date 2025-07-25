@@ -5,13 +5,13 @@ import plotly.express as plt
 import base64
 import numpy as np
 
-
+''' Dashboard Page Setup '''
 st.set_page_config(
     page_title='Business Analytics Dashboard',
     layout='centered'
 )
 
-
+''' File Uploading Function '''
 def upload_file():
     uploaded_file = st.sidebar.file_uploader(
         label='Upload CSV File',
@@ -24,7 +24,6 @@ def upload_file():
     for file in uploaded_file:
         if file.name == 'products.csv':
             product_data = pd.read_csv(file)
-
         elif file.name == 'purchases.csv':
             purchases_data = pd.read_csv(file)
             purchases_data =pd.to_datetime(purchases_data['purchase_date']).dt.date
@@ -119,7 +118,7 @@ if product_data is not None:
 
     with low_stock:
         st.metric(
-            label='Total UnderStock',
+            label='Total UnderStock', 
             value=f'{summary_keys['Total Understock Product']}'
         )
 
