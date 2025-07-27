@@ -63,19 +63,6 @@ def Current_Stock(product_id,purchases_data,sales_data):
     per_product_stock = per_product_purchase - per_product_sale
 
     return per_product_stock
-'''
-print(Current_Stock(1095,purchases_data,sales_data))
-
-product_data['Current_Stock'] = product_data['product_id'].apply(
-    lambda product_id : Current_Stock(
-        product_id=product_id,
-        purchases_data=purchases_data,
-        sales_data=sales_data        
-        )
-    )
-print(product_data.head())
-'''
-
 
 ''' Calculate Per Products Profit  '''
 def per_product_profit(product_id,sales_data,product_data):
@@ -91,29 +78,11 @@ def per_product_profit(product_id,sales_data,product_data):
     per_product_total_profit = per_product_profit * per_product_sold_quantity
 
     return per_product_total_profit
-'''
-print(per_product_profit(1095,sales_data,product_data))
-
-product_data['Per_Product_Profit'] = product_data['product_id'].apply(
-    lambda product_id : per_product_profit(
-        product_id=product_id,
-        sales_data=sales_data,
-        product_data=product_data
-        )
-)
-print(product_data.head())
-'''
 
 
 startDate = datetime.strptime('2024-12-31','%Y-%m-%d').date()
 lastDate = startDate - timedelta(days=90)
-'''
-product_id = 1095
-product_Sale_by_90days = sales_data[ 
-    (sales_data['product_id'] == product_id)&
-    (sales_data['sale_date'] >= lastDate)
-]['quantity_sold'].sum()
-'''
+
 
 ''' All Slow Moving Products '''
 def Slow_Moving_Product(product_id,sales_data):
@@ -123,15 +92,6 @@ def Slow_Moving_Product(product_id,sales_data):
     ]['quantity_sold'].sum()
 
     return per_product_info < 40
-'''
-product_data['Slow_Moving_Products'] = product_data['product_id'].apply(
-    lambda product_id: Slow_Moving_Product(
-        product_id=product_id,
-        sales_data=sales_data
-        )
-)
-print(product_data.head())
-'''
 
 
 ''' Find Products Understock, Overstock, perfectStock '''
@@ -147,16 +107,6 @@ def Stock_status(product_id,product_data):
     elif current_stock > recorder_level*15: return 'OverStock'
     else: return 'Perfect-Stock'
 
-'''
-print(Stock_status(1095,product_data))
-product_data['Stock_Status'] = product_data['product_id'].apply(
-    lambda product_id: Stock_status(
-        product_id=product_id,
-        product_data=product_data
-    )
-)
-print(product_data.head())
-'''
 
 ''' Per Products Revenue '''
 def per_product_revenue(product_data, sales_data, product_id):
@@ -171,19 +121,15 @@ def per_product_revenue(product_data, sales_data, product_id):
     revenue = quantity_sold * selling_price
 
     return revenue
-'''
-per_product_revenue(
-    product_data=product_data,
-    sales_data=sales_data,
-    product_id=1095
-)
-'''
+
+print(per_product_revenue(product_data, sales_data,1095))
+
 ''' Filter Product by time & location based '''
 def sales_between_dates(sales_data, startDate, lastDate, location):
     return sales_data[ 
-        (sales_data['sale_date'] >= startDate)
-        &(sales_data['sale_date'] <= lastDate)
-        &(sales_data['location'].isin(location))
+         (sales_data['sale_date'] >= startDate)&
+        (sales_data['sale_date'] <= lastDate)&
+        (sales_data['location'].isin(location))
     ]
 
 ''' Filter Category '''
@@ -251,3 +197,23 @@ def add_business_analytics(sales_data, product_data,purchases_data):
     )
 
     return sales_data, product_data, purchases_data
+sales_data, product_data, purchases_data = add_business_analytics(sales_data, product_data,purchases_data)
+print(product_data.head())
+print(purchases_data.head())
+print(sales_data.head())
+filtered_sale = sales_between_dates(
+    sales_data=sales_data,
+    startDate=datetime.strptime('2024-01-01','%Y-%m-%d').date(),
+    lastDate= datetime.strptime('2024-12-31','%Y-%m-%d').date(),
+    location=['Dhaka']
+)
+filtered_product = Selected_category(
+    product_data=product_data,
+    category=['Electronics']
+)
+summay_check = summay_of_data(filtered_product, filtered_sale)
+print(f'{summay_check['Total Revenue (K)']}')
+print(f'{summay_check['Total Profit (K)']}')
+print(f'{summay_check['Total Sold Quantity (K)']}')
+print(f'{summay_check['Total Understock Product']}')
+print(filtered_sale)
