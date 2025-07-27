@@ -127,15 +127,27 @@ if product_data is not None and purchases_data is not None and sales_data is not
             value=f"{summary_keys['Total Understock Product']}"
         )
 
-        # Visualaization by plotly
-        st.subheader('Top 10 Products by Profit:')
-        top_product = filtered_product.nlargest(10,'Per_Product_Profit')[['product_name', 'per_Product_Profit']]
-        plot1 = pt.bar(top_product, x='product_name', y='Per_Product_Profit',title='Top 10 Products by Profit')
-        st.plotly_chart(plot1, use_container_width=True)
+    # Visualaization by plotly
+    st.subheader('Top 10 Products by Profit:')
+    top_product = filtered_product.nlargest(10,'Per_Product_Profit')[['product_name', 'Per_Product_Profit']]
+    plot1 = pt.bar(top_product, x='product_name', y='Per_Product_Profit',title='Top 10 Products by Profit')
+    st.plotly_chart(plot1, use_container_width=True)
 
 
-        st.subheader('Product Distribution:')
-        product =filtered_product.groupby('category')['Per_Product_Profit'].sum().reset_index()
-        plot2 = pt.pie(product, values='Per_Product_Profit',name='category', title='Product Distribution')
-        st.pyplot(plot2, use_container_width=True)
-    
+    st.subheader('Product Distribution:')
+    product =filtered_product.groupby('category')['Per_Product_Profit'].sum().reset_index()
+    plot2 = pt.pie(product, values='Per_Product_Profit',names='category', title='Product Distribution')
+    st.plotly_chart(plot2, use_container_width=True)
+
+
+    # Dashboard Table
+    st.subheader('Product Stock and Profit information:')
+    stock_info = filtered_product[[
+        'product_name','category','Current_Stock','reorder_level','Per_Product_Profit','Stock_Status'
+    ]]
+    stock_info['Stock_Status']= stock_info['Stock_Status'].map({
+        'UnderStock':"<span style='color:red'>UnderStock</span>",
+        'Perfect-Stock':"<span style='color:black'>Perfect Stock</span>",
+        'OverStock':"<span style='color:blue'>OverStock</span>"
+    })
+    st.markdown(stock_info.to_html(escape=False),unsafe_allow_html=True)
