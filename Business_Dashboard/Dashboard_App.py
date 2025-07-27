@@ -1,19 +1,19 @@
 ''' Import all Item '''
 from Analysis_Data import *
 import streamlit as st
-import plotly.express as plt
+import plotly.express as pt
 import base64
 import numpy as np
 import pandas as pd
 from datetime import datetime
 
-
+# Dashboard Page Setup
 st.set_page_config(
     page_title='Business Analytics Dashboard',
     layout='centered'
 )
 
-
+# Dashboard File Uploading function
 def upload_file():
     uploaded_file = st.sidebar.file_uploader(
         label='Upload CSV File',
@@ -37,7 +37,7 @@ def upload_file():
 product_data, purchases_data, sales_data = upload_file()
 
 
-
+# Dashboard Sidebar
 st.sidebar.header('Filters')
 
 date1 = datetime.strptime('2024-01-01','%Y-%m-%d').date()
@@ -64,7 +64,7 @@ category_select = st.sidebar.multiselect(
 print(category_select)
 
 
-
+# Dashboard
 st.header('Business Analytics Dashboard')
 if product_data is not None and purchases_data is not None and sales_data is not None:
     sales_data,product_data,purchases_data= add_business_analytics(
@@ -100,6 +100,8 @@ if product_data is not None and purchases_data is not None and sales_data is not
         sales_data=filtered_sale   
     )
 
+    # Dashboard column
+
     revenue_col, profit_col, Total_sold_col, Understock_product_col = st.columns(4)
     with revenue_col:
         st.metric(
@@ -124,3 +126,16 @@ if product_data is not None and purchases_data is not None and sales_data is not
             label='Total Understock Product',
             value=f"{summary_keys['Total Understock Product']}"
         )
+
+        # Visualaization by plotly
+        st.subheader('Top 10 Products by Profit:')
+        top_product = filtered_product.nlargest(10,'Per_Product_Profit')[['product_name', 'per_Product_Profit']]
+        plot1 = pt.bar(top_product, x='product_name', y='Per_Product_Profit',title='Top 10 Products by Profit')
+        st.plotly_chart(plot1, use_container_width=True)
+
+
+        st.subheader('Product Distribution:')
+        product =filtered_product.groupby('category')['Per_Product_Profit'].sum().reset_index()
+        plot2 = pt.pie(product, values='Per_Product_Profit',name='category', title='Product Distribution')
+        st.pyplot(plot2, use_container_width=True)
+    
