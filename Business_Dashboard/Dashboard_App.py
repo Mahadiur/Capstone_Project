@@ -179,24 +179,24 @@ if product_data is not None and purchases_data is not None and sales_data is not
     recommends=[]
 
     UnderStock= Filterd_products[Filterd_products['Stock_Status'] == 'UnderStock']
-    if not UnderStock.empty():
+    if not UnderStock.empty:
         recommends.append(
-            f'**Argently Restock: {len(UnderStock)} products are UnderStock.UnderStock Products Name {UnderStock.Name}'
+            f'**Argently Restock: {len(UnderStock)} products are UnderStock.UnderStock Products Name => {UnderStock['product_name'].tolist()}'
         )
     Slow_moving = Filterd_products[Filterd_products['Slow_Moving_Products'] == True]
-    if not Slow_moving.empty():
+    if not Slow_moving.empty:
         recommends.append(
-            f'**Slow Moving Products: {len(Slow_moving)} products are Move Slowly. Slow moving produts name {Slow_moving.Name}'
+            f'**Slow Moving Products: {len(Slow_moving)} products are Move Slowly. Slow moving produts name => {Slow_moving['product_name'].tolist()}'
         )
 
     OverStock = Filterd_products[Filterd_products['Stock_Status'] == 'OverStock']
-    if not OverStock.empty():
+    if not OverStock.empty:
         recommends.append(
-            f'**Argently Sale: {len(OverStock)} products are OverStock. OverStock Products name {OverStock.Name}'
+            f'**Argently Sale: {len(OverStock)} products are OverStock. OverStock Products name Rainbow:{OverStock['product_name'].tolist()}'
         )
 
     for i in recommends:
-        st.markdown(i)
+        st.markdown(f' :rainbow[{i}]')
 
     # Just for enjoy 
     if st.button('Send Ballons'):
