@@ -36,7 +36,7 @@ purchases_data.columns = purchases_data.columns.str.strip()
 sales_data.columns = sales_data.columns.str.strip()
 
 
-''' Convert String to Datetime '''
+# ''' Convert String to Datetime''' 
 sales_data['sale_date'] = pd.to_datetime(sales_data['sale_date']).dt.date
 date1 =datetime.strptime('2024-09-01','%Y-%m-%d').date()
 date2 =datetime.strptime('2024-09-03','%Y-%m-%d').date()
@@ -45,7 +45,7 @@ date = sales_data['sale_date'].iloc[0]
 print(date1 <= date <= date2)
 
 
-''' Convert String to Datetime '''
+# ''' Convert String to Datetime '''
 purchases_data['purchase_date'] = pd.to_datetime(purchases_data['purchase_date']).dt.date
 date3 = datetime.strptime('2024-08-18','%Y-%m-%d').date()
 date4 = datetime.strptime('2024-08-20','%Y-%m-%d').date()
@@ -53,7 +53,7 @@ Date = purchases_data['purchase_date'].iloc[0]
 print(date3 <= Date <= date4)
 
 
-''' Compute Current Stock Function '''
+# ''' Compute Current Stock Function '''
 def Current_Stock(product_id,purchases_data,sales_data):
     # per product purchase quantity
     per_product_purchase = purchases_data[purchases_data['product_id'] == product_id]['quantity_purchased'].sum()
@@ -64,7 +64,7 @@ def Current_Stock(product_id,purchases_data,sales_data):
 
     return per_product_stock
 
-''' Calculate Per Products Profit  '''
+# ''' Calculate Per Products Profit  '''
 def per_product_profit(product_id,sales_data,product_data):
     per_product_sold_quantity = sales_data[
         sales_data['product_id'] == product_id
@@ -84,7 +84,7 @@ startDate = datetime.strptime('2024-12-31','%Y-%m-%d').date()
 lastDate = startDate - timedelta(days=90)
 
 
-''' All Slow Moving Products '''
+# ''' All Slow Moving Products '''
 def Slow_Moving_Product(product_id,sales_data):
     per_product_info = sales_data[ 
         (sales_data['product_id'] == product_id) &
@@ -94,7 +94,7 @@ def Slow_Moving_Product(product_id,sales_data):
     return per_product_info < 40
 
 
-''' Find Products Understock, Overstock, perfectStock '''
+# ''' Find Products Understock, Overstock, perfectStock '''
 def Stock_status(product_id,product_data):
     product = product_data[
         product_data['product_id'] == product_id
@@ -108,7 +108,7 @@ def Stock_status(product_id,product_data):
     else: return 'Perfect-Stock'
 
 
-''' Per Products Revenue '''
+# ''' Per Products Revenue '''
 def per_product_revenue(product_data, sales_data, product_id):
     selling_price = product_data[ 
         product_data['product_id'] == product_id
@@ -124,7 +124,7 @@ def per_product_revenue(product_data, sales_data, product_id):
 
 print(per_product_revenue(product_data, sales_data,1095))
 
-''' Filter Product by time & location based '''
+# ''' Filter Product by time & location based '''
 def sales_between_dates(sales_data, startDate, lastDate, location):
     return sales_data[ 
          (sales_data['sale_date'] >= startDate)&
@@ -132,16 +132,16 @@ def sales_between_dates(sales_data, startDate, lastDate, location):
         (sales_data['location'].isin(location))
     ]
 
-''' Filter Category '''
+# ''' Filter Category '''
 def Selected_category(product_data, category):
     return product_data[product_data['category'].isin(category)]
 
-''' Filter UnderStock '''
+# ''' Filter UnderStock '''
 def Product_UnderStock(product_data):
     return product_data[product_data['Stock_Status'] == 'UnderStock']
 
 
-''' Product Revenue, profit, sold-quantity, UnderStock '''
+# ''' Product Revenue, profit, sold-quantity, UnderStock '''
 def summay_of_data(product_data, sales_data):
     total_revenue = product_data['product_id'].apply(
         lambda product_id: per_product_revenue(
@@ -165,7 +165,7 @@ def summay_of_data(product_data, sales_data):
         'Total Understock Product':total_understock
     }
 
-''' More import Function for Dashboard '''
+# ''' More import Function for Dashboard '''
 def add_business_analytics(sales_data, product_data,purchases_data):
     product_data['Current_Stock'] = product_data['product_id'].apply(
         lambda product_id : Current_Stock(
@@ -218,7 +218,7 @@ print(f'{summay_check['Total Sold Quantity (K)']}')
 print(f'{summay_check['Total Understock Product']}')
 print(filtered_sale)
 
-''' Import all Item '''
+# ''' Import all Item '''
 # from Analysis_Data import *
 import streamlit as st
 import plotly.express as pt
