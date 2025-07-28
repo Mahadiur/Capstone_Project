@@ -1,6 +1,5 @@
 import os 
 import pandas as pd
-import plotly.express as plt
 from datetime import timedelta
 from datetime import datetime
 
