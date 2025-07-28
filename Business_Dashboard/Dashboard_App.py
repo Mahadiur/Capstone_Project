@@ -129,13 +129,13 @@ if product_data is not None and purchases_data is not None and sales_data is not
 
     # Visualaization by plotly
     st.subheader('Top 10 Products by Profit:')
-    top_product = filtered_product.nlargest(10,'Per_Product_Profit')[['product_name', 'Per_Product_Profit']]
+    top_product = Filterd_products.nlargest(10,'Per_Product_Profit')[['product_name', 'Per_Product_Profit']]
     plot1 = pt.bar(top_product, x='product_name', y='Per_Product_Profit',title='Top 10 Products by Profit')
     st.plotly_chart(plot1, use_container_width=True)
 
 
     st.subheader('Product Distribution:')
-    product =filtered_product.groupby('category')['Per_Product_Profit'].sum().reset_index()
+    product =Filterd_products.groupby('category')['Per_Product_Profit'].sum().reset_index()
     plot2 = pt.pie(product, values='Per_Product_Profit',names='category', title='Product Distribution')
     st.plotly_chart(plot2, use_container_width=True)
 
@@ -168,7 +168,36 @@ if product_data is not None and purchases_data is not None and sales_data is not
     def Download_function(data, filename):
         csv = data.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
-        return f"<a href='data/file;base64',{b64} download={filename}.csv>Download {filename} </a>"
+        return f"<a href='data/file;base64,{b64}' download='{filename}.csv'>Download {filename} </a>"
 
-    st.markdown(stock_info, 'Stock_information', unsafe_allow_html=True) 
-    st.markdown(over_under_stock, 'Over_Under_Stock _info', unsafe_allow_html=True)
+    st.markdown(Download_function(stock_info, 'stock_info'),unsafe_allow_html=True) 
+    st.markdown(Download_function(over_under_stock, 'over_under_stock') ,unsafe_allow_html=True)
+
+
+    # Recommendations
+    st.subheader('Business Recommendations:')
+    recommends=[]
+
+    UnderStock= Filterd_products[Filterd_products['Stock_Status'] == 'UnderStock']
+    if not UnderStock.empty():
+        recommends.append(
+            f'**Argently Restock: {len(UnderStock)} products are UnderStock.UnderStock Products Name {UnderStock.Name}'
+        )
+    Slow_moving = Filterd_products[Filterd_products['Slow_Moving_Products'] == True]
+    if not Slow_moving.empty():
+        recommends.append(
+            f'**Slow Moving Products: {len(Slow_moving)} products are Move Slowly. Slow moving produts name {Slow_moving.Name}'
+        )
+
+    OverStock = Filterd_products[Filterd_products['Stock_Status'] == 'OverStock']
+    if not OverStock.empty():
+        recommends.append(
+            f'**Argently Sale: {len(OverStock)} products are OverStock. OverStock Products name {OverStock.Name}'
+        )
+
+    for i in recommends:
+        st.markdown(i)
+
+    # Just for enjoy 
+    if st.button('Send Ballons'):
+        st.balloons()
