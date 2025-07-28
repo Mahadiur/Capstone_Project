@@ -147,7 +147,14 @@ if product_data is not None and purchases_data is not None and sales_data is not
     ]]
     stock_info['Stock_Status']= stock_info['Stock_Status'].map({
         'UnderStock':"<span style='color:red'>UnderStock</span>",
-        'Perfect-Stock':"<span style='color:black'>Perfect Stock</span>",
+        'Perfect-Stock':"<span style='color:skyblue'>Perfect Stock</span>",
         'OverStock':"<span style='color:blue'>OverStock</span>"
     })
     st.markdown(stock_info.to_html(escape=False),unsafe_allow_html=True)
+
+
+    st.subheader('OverStock and UnderStock Products:')
+    over_under_stock = filtered_product[filtered_product['Stock_Status'].isin(['UnderStock', 'OverStock'])]
+    over_under_stock = over_under_stock[['product_name', 'category', 'reorder_level', 'Current_Stock', 'Stock_Status']]
+    over_under_stock['Suggested_reorder'] = np.where(over_under_stock['Stock_Status']=='UnderStock', over_under_stock['reorder_level'] - over_under_stock['Current_Stock'],0)
+    st.markdown(over_under_stock.to_html(escape=False), unsafe_allow_html=True)
